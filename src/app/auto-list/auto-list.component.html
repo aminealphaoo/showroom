@@ -1,0 +1,31 @@
+<ul class="grid">
+  <li *ngFor="let auto of autos" class="card">
+    <div class="card__media">
+      <img
+        [src]="'photos/' + auto.photo"
+        [alt]="auto.brand + ' ' + auto.model"
+        loading="lazy"
+        (error)="onImgError($event)"
+      />
+    </div>
+    <div class="card__body">
+      <p class="card__brand">{{ auto.brand }}</p>
+      <h3 class="card__model">{{ auto.model }}</h3>
+      <dl class="card__facts">
+        <div>
+          <dt>Prix</dt>
+          <dd>{{ auto.price * 1000 | number: '1.0-0' }} DNT</dd>
+        </div>
+        <div>
+          <dt>Puissance</dt>
+          <dd>{{ auto.power }} CV</dd>
+        </div>
+        <div>
+          <dt>Disponibilité</dt>
+          <dd>{{ auto.availability }} unité<span *ngIf="auto.availability > 1">s</span></dd>
+        </div>
+      </dl>
+      <button type="button" class="card__button" (click)="view(auto)">View</button>
+    </div>
+  </li>
+</ul>

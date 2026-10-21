@@ -1,0 +1,62 @@
+<app-head-bar></app-head-bar>
+
+<main class="page">
+  <p class="intro">
+    Bienvenue dans notre showroom. Recherchez une marque, parcourez les modèles disponibles,
+    puis cliquez sur <strong>View</strong> pour consulter les caractéristiques d'une voiture.
+  </p>
+
+  <div class="layout">
+    <!-- Parent → enfant : [autos]="autoList" ; enfant → parent : (selectAutoEvent)="updateAuto($event)" -->
+    <app-search-bar
+      class="layout__search"
+      [autos]="autoList"
+      (selectAutoEvent)="updateAuto($event)"
+    ></app-search-bar>
+
+    <aside class="details" aria-live="polite" aria-labelledby="details-title">
+      <h2 id="details-title" class="details__title">Caractéristiques</h2>
+
+      <p *ngIf="!selectedAuto" class="details__empty">
+        Aucune voiture sélectionnée. Lancez une recherche puis cliquez sur <strong>View</strong>
+        pour afficher les détails d'un modèle ici.
+      </p>
+
+      <article *ngIf="selectedAuto" class="details__card">
+        <img
+          class="details__photo"
+          [src]="'photos/' + selectedAuto.photo"
+          [alt]="selectedAuto.brand + ' ' + selectedAuto.model"
+          (error)="onImgError($event)"
+        />
+        <dl class="details__list">
+          <div>
+            <dt>Make</dt>
+            <dd>{{ selectedAuto.brand }}</dd>
+          </div>
+          <div>
+            <dt>Model</dt>
+            <dd>{{ selectedAuto.model }}</dd>
+          </div>
+          <div>
+            <dt>Price</dt>
+            <dd>{{ selectedAuto.price * 1000 | number: '1.0-0' }} DNT</dd>
+          </div>
+          <div>
+            <dt>Power</dt>
+            <dd>{{ selectedAuto.power }} CV</dd>
+          </div>
+          <div>
+            <dt>Availability</dt>
+            <dd>{{ selectedAuto.availability }} unit{{ selectedAuto.availability > 1 ? 's' : '' }} available</dd>
+          </div>
+        </dl>
+        <p class="details__description">{{ selectedAuto.description }}</p>
+      </article>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>showroom-auto · TP-2 Angular · 3BI, IHEC Carthage</p>
+</footer>

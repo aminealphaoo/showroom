@@ -1,0 +1,47 @@
+.head-bar {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 8%, transparent 8% 100%),
+    linear-gradient(135deg, #14171a 0%, #2b3035 100%);
+  color: #fff;
+  padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  text-align: center;
+}
+
+.head-bar__inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.head-bar__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #d9b36c;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+}
+
+.head-bar__subtitle {
+  margin: 1rem auto 0;
+  max-width: 620px;
+  color: #c4c9ce;
+  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+  line-height: 1.5;
+}
+
+.head-bar__line {
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin: 1.5rem auto 0;
+  background: #d9b36c;
+  border-radius: 2px;
+}

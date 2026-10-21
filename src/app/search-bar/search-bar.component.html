@@ -1,0 +1,41 @@
+<section class="search" aria-labelledby="search-title">
+  <h2 id="search-title" class="visually-hidden">Recherche par marque</h2>
+
+  <form class="search__form" (submit)="$event.preventDefault()" novalidate>
+    <label for="brand-input" class="search__label">Brand</label>
+    <input
+      id="brand-input"
+      name="brand"
+      type="text"
+      class="search__input"
+      placeholder="Sample : BMW"
+      autocomplete="off"
+      [(ngModel)]="brand"
+    />
+    <!-- type="submit" : la touche Entrée déclenche aussi ce clic, sans recharger la page -->
+    <button type="submit" class="search__button" (click)="searchAutoList()">Search</button>
+  </form>
+
+  <p *ngIf="emptyInput" class="message message--warning" role="alert">
+    Veuillez saisir une marque (ex. BMW, Audi, Jaguar) avant de lancer la recherche.
+  </p>
+
+  <p *ngIf="!hasSearched && !emptyInput" class="message">
+    Saisissez une marque pour afficher les modèles disponibles.
+  </p>
+
+  <p *ngIf="hasSearched && results.length === 0" class="message message--warning" role="status">
+    Aucun modèle trouvé pour « {{ searchedBrand }} ». Essayez une autre marque.
+  </p>
+
+  <p *ngIf="hasSearched && results.length > 0" class="message message--success" role="status">
+    {{ results.length }} modèle<span *ngIf="results.length > 1">s</span> trouvé<span *ngIf="results.length > 1">s</span> pour « {{ searchedBrand }} ».
+  </p>
+
+  <!-- Les résultats sont affichés par auto-list ; le clic sur View remonte jusqu'ici puis vers AppComponent -->
+  <app-auto-list
+    *ngIf="results.length > 0"
+    [autos]="results"
+    (viewAuto)="selectedAuto($event)"
+  ></app-auto-list>
+</section>
