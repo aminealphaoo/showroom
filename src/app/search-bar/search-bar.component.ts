@@ -2,11 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auto } from '../auto';
-import { AutoListComponent } from '../auto-list/auto-list.component';
 
 @Component({
-  selector: 'app-search-bar',
-  imports: [CommonModule, FormsModule, AutoListComponent],
+  selector: 'app-search-bar, search-bar',
+  imports: [CommonModule, FormsModule],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.css'
 })
@@ -56,11 +55,25 @@ export class SearchBarComponent {
     this.selectAutoEvent.emit(auto);
   }
 
+  /** Permet la sélection rapide d'une marque depuis les badges. */
+  selectBrand(brandName: string): void {
+    this.brand = brandName;
+    this.searchAutoList();
+  }
+
+  /** Visuel de secours si la photo n'existe pas dans public/photos. */
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.src.endsWith('photos/placeholder.svg')) {
+      img.src = 'photos/placeholder.svg';
+    }
+  }
+
   /** Minuscules, sans accents, sans espaces ni tirets : « Mercedes-Benz » ≈ « mercedes benz ». */
   private normalize(value: string): string {
     return value
       .normalize('NFD')
-      .replace(/[̀-ͯ]/g, '')
+      .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '');
   }

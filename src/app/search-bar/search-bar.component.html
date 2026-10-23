@@ -2,40 +2,91 @@
   <h2 id="search-title" class="visually-hidden">Recherche par marque</h2>
 
   <form class="search__form" (submit)="$event.preventDefault()" novalidate>
-    <label for="brand-input" class="search__label">Brand</label>
-    <input
-      id="brand-input"
-      name="brand"
-      type="text"
-      class="search__input"
-      placeholder="Sample : BMW"
-      autocomplete="off"
-      [(ngModel)]="brand"
-    />
+    <div class="search__field">
+      <label for="brand-input" class="search__label">Brand</label>
+      <input
+        id="brand-input"
+        name="brand"
+        type="text"
+        class="search__input"
+        placeholder="Sample : BMW, Audi, Mercedes..."
+        autocomplete="off"
+        [(ngModel)]="brand"
+      />
+    </div>
     <!-- type="submit" : la touche Entrée déclenche aussi ce clic, sans recharger la page -->
-    <button type="submit" class="search__button" (click)="searchAutoList()">Search</button>
+    <button type="submit" class="search__button" (click)="searchAutoList()">
+      <svg class="search__icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
+        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+      </svg>
+      Search
+    </button>
   </form>
 
+  <!-- Suggestions rapides de marques pour une interaction fluide -->
+  <div class="quick-chips" aria-label="Suggestions de marques populaires">
+    <span class="quick-chips__label">Marques :</span>
+    <button type="button" class="chip" (click)="selectBrand('BMW')">BMW</button>
+    <button type="button" class="chip" (click)="selectBrand('Mercedes Benz')">Mercedes-Benz</button>
+    <button type="button" class="chip" (click)="selectBrand('Audi')">Audi</button>
+    <button type="button" class="chip" (click)="selectBrand('Jaguar')">Jaguar</button>
+    <button type="button" class="chip" (click)="selectBrand('Land Rover')">Land Rover</button>
+    <button type="button" class="chip" (click)="selectBrand('Alfa Romeo')">Alfa Romeo</button>
+  </div>
+
   <p *ngIf="emptyInput" class="message message--warning" role="alert">
+    <span class="message__icon">⚠️</span>
     Veuillez saisir une marque (ex. BMW, Audi, Jaguar) avant de lancer la recherche.
   </p>
 
-  <p *ngIf="!hasSearched && !emptyInput" class="message">
+  <p *ngIf="!hasSearched && !emptyInput" class="message" role="status">
+    <span class="message__icon">💡</span>
     Saisissez une marque pour afficher les modèles disponibles.
   </p>
 
   <p *ngIf="hasSearched && results.length === 0" class="message message--warning" role="status">
-    Aucun modèle trouvé pour « {{ searchedBrand }} ». Essayez une autre marque.
+    <span class="message__icon">🔍</span>
+    Aucun modèle trouvé pour « <strong>{{ searchedBrand }}</strong> ». Essayez une autre marque.
   </p>
 
   <p *ngIf="hasSearched && results.length > 0" class="message message--success" role="status">
-    {{ results.length }} modèle<span *ngIf="results.length > 1">s</span> trouvé<span *ngIf="results.length > 1">s</span> pour « {{ searchedBrand }} ».
+    <span class="message__icon">✓</span>
+    {{ results.length }} modèle<span *ngIf="results.length > 1">s</span> trouvé<span *ngIf="results.length > 1">s</span> pour « <strong>{{ searchedBrand }}</strong> ».
   </p>
 
-  <!-- Les résultats sont affichés par auto-list ; le clic sur View remonte jusqu'ici puis vers AppComponent -->
-  <app-auto-list
-    *ngIf="results.length > 0"
-    [autos]="results"
-    (viewAuto)="selectedAuto($event)"
-  ></app-auto-list>
+  <!-- Partie C & D du TP-2 : affichage des voitures avec *ngFor et émission de selectedAuto(auto) lors du clic sur View -->
+  <ul *ngIf="results.length > 0" class="grid" aria-label="Liste des modèles trouvés">
+    <li *ngFor="let auto of results" class="card">
+      <div class="card__media">
+        <img
+          [src]="'photos/' + auto.photo"
+          [alt]="auto.brand + ' ' + auto.model"
+          loading="lazy"
+          (error)="onImgError($event)"
+        />
+        <span class="card__badge">{{ auto.power }} CV</span>
+      </div>
+      <div class="card__body">
+        <p class="card__brand">{{ auto.brand }}</p>
+        <h3 class="card__model">{{ auto.model }}</h3>
+        <dl class="card__facts">
+          <div>
+            <dt>Prix</dt>
+            <dd>{{ auto.price * 1000 | number: '1.0-0' }} DNT</dd>
+          </div>
+          <div>
+            <dt>Puissance</dt>
+            <dd>{{ auto.power }} CV</dd>
+          </div>
+          <div>
+            <dt>Disponibilité</dt>
+            <dd>{{ auto.availability }} unité<span *ngIf="auto.availability > 1">s</span></dd>
+          </div>
+        </dl>
+        <button type="button" class="card__button" (click)="selectedAuto(auto)">
+          View
+        </button>
+      </div>
+    </li>
+  </ul>
 </section>

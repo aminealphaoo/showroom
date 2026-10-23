@@ -1,65 +1,99 @@
-# showroom-auto
+# Showroom Auto — Application Angular
 
-Application **Angular** (TP-2 – *Framework de développement web*, 3BI, IHEC Carthage) permettant de rechercher des voitures par marque, de consulter les modèles disponibles et d'afficher les caractéristiques d'un modèle sélectionné.
+Application **Angular** développée dans le cadre du **TP-2** (*Frameworks de développement web frontend*, 3BI, IHEC Carthage, 2026-2027). Elle permet de rechercher des véhicules automobiles par marque, de consulter les modèles correspondants et d'afficher les caractéristiques complètes d'un véhicule sélectionné.
 
-## Technologies
+- **Dépôt GitHub :** [https://github.com/aminealphaoo/showroom.git](https://github.com/aminealphaoo/showroom.git)
+- **Application Déployée (GitHub Pages) :** [https://aminealphaoo.github.io/showroom/](https://aminealphaoo.github.io/showroom/)
 
-Angular 21 (Angular CLI 21), TypeScript, HTML, CSS. Données locales (aucun backend, aucune API).
+---
 
-## Fonctionnalités
+## 1. Architecture & Notions Pédagogiques Démontrées
 
-- En-tête `Welcome to my showroom` (composant `head-bar`).
-- Recherche par marque (champ + bouton `Search`, touche Entrée supportée), insensible à la casse, aux espaces et aux accents.
-- Messages pour l'état initial, la saisie vide, l'absence de résultat et le nombre de résultats.
-- Cartes de modèles avec photo, prix, puissance, disponibilité et bouton `View`.
-- Panneau de caractéristiques mis à jour à chaque clic sur `View`.
-- Visuel de secours (`public/photos/placeholder.svg`) si une photo est absente.
-- Design responsive (ordinateur, tablette, téléphone). SPA : aucun rechargement de page.
+Conformément au cours d'introduction (*Chapitre 1 : Introduction à Angular*), au sujet du TP (*TP-2*) et au document technique (*Communication Parent-Enfant*), l'application applique les concepts suivants :
 
-## Notions Angular démontrées
+| Notion du Cours | Rôle & Contexte | Fichier d'implémentation |
+|---|---|---|
+| **Architecture SPA (Single Page Application)** | Navigation et consultation fluides sans aucun rechargement complet de la page | `src/index.html`, `src/app/app.component.html` |
+| **Architecture MVVM** | Séparation claire Modèle (données typées), Vue (templates HTML), ViewModel (classes TypeScript) | Ensemble du dossier `src/app/` |
+| **Typage TypeScript & Interface** | Interface `Auto` avec propriétés (`brand`, `model`, `price`, `power`, `photo`, `availability`, `description`) | [`src/app/auto.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/auto.ts) |
+| **Composant En-tête (`HeadBarComponent`)** | En-tête affichant le titre exact obligatoire *« Welcome to my showroom »* | [`src/app/head-bar/head-bar.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/head-bar/head-bar.component.ts) & `.html` |
+| **Composant Recherche (`SearchBarComponent`)** | Formulaire de recherche avec saisie, bouton `Search`, chips de marques et grille de modèles | [`src/app/search-bar/search-bar.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.ts) & `.html` |
+| **Composant Racine (`AppComponent`)** | Gestion de la liste source `autoList` et de la voiture sélectionnée `selectedAuto` | [`src/app/app.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/app.component.ts) & `.html` |
+| **Communication Parent → Enfant (`@Input()`)** | Transmission de la liste `autoList` vers `autos` via `[autos]="autoList"` | [`src/app/search-bar/search-bar.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.ts#L15), `app.component.html` |
+| **Communication Enfant → Parent (`@Output()`)** | Événement `@Output() selectAutoEvent = new EventEmitter<Auto>()` | [`src/app/search-bar/search-bar.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.ts#L18) |
+| **Émission d'événement (`emit()`)** | Méthode `selectedAuto(auto)` déclenchée par le clic sur `View` | [`src/app/search-bar/search-bar.component.ts`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.ts#L55) |
+| **Réception d'événement (`$event`)** | Liaison d'événement `(selectAutoEvent)="updateAuto($event)"` dans le parent | [`src/app/app.component.html`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/app.component.html#L14) |
+| **Directive structurelle `*ngFor`** | Itération et rendu des cartes de voitures trouvées | [`src/app/search-bar/search-bar.component.html`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.html#L55) |
+| **Directive structurelle `*ngIf`** | Affichage conditionnel des caractéristiques du véhicule et messages d'état | [`src/app/app.component.html`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/app.component.html#L20-L25), `search-bar.component.html` |
+| **Liaison bidirectionnelle `[(ngModel)]`** | Synchronisation en temps réel de la valeur du champ de recherche `brand` | [`src/app/search-bar/search-bar.component.html`](file:///c:/Users/amine/Downloads/showroom-auto/showroom-auto/src/app/search-bar/search-bar.component.html#L14) |
+| **Liaison de propriétés `[src]`, `[alt]`** | Affichage dynamique des images locales du dossier `public/photos` | `search-bar.component.html`, `app.component.html` |
+| **Liaison d'événements `(click)`** | Déclenchement de `searchAutoList()` et `selectedAuto(auto)` | `search-bar.component.html` |
+| **Interpolation `{{ }}`** | Affichage dynamique des propriétés et du formatage de prix | Tous les templates HTML |
 
-| Notion | Fichier |
-|---|---|
-| Interface TypeScript `Auto` | `src/app/auto.ts` |
-| Liste `autoList: Auto[]` | `src/app/app.component.ts` |
-| Composant principal `AppComponent` | `src/app/app.component.*` |
-| Composants `head-bar`, `search-bar`, `auto-list` | `src/app/<nom>/` |
-| `@Input() autos` | `src/app/search-bar/search-bar.component.ts` |
-| Property binding `[autos]="autoList"` | `src/app/app.component.html` |
-| Méthode `searchAutoList()` + event binding `(click)` | `search-bar.component.ts` / `.html` |
-| `*ngFor` (cartes des modèles) | `src/app/auto-list/auto-list.component.html` |
-| `@Output() selectAutoEvent = new EventEmitter<Auto>()` | `search-bar.component.ts` |
-| `selectedAuto(auto)` → `emit(auto)` | `search-bar.component.ts` |
-| `(selectAutoEvent)="updateAuto($event)"` | `app.component.html` |
-| `selectedAuto: Auto \| null` + `updateAuto(auto)` | `app.component.ts` |
-| `*ngIf` (détails, états) | `app.component.html`, `search-bar.component.html` |
-| Interpolation `{{ }}` | tous les templates |
+---
 
-**Flux :** `AppComponent` → `[autos]="autoList"` → `SearchBarComponent` → `<app-auto-list [autos]="results">` ; clic sur `View` → `AutoListComponent.viewAuto` → `SearchBarComponent.selectedAuto(auto)` → `selectAutoEvent.emit(auto)` → `AppComponent.updateAuto($event)` → `selectedAuto` → `*ngIf`.
+## 2. Flux de Données & Communication Inter-Composants
 
-## Installation et lancement
-
-Prérequis : Node.js ≥ 20.19 (ou 22.12+), npm.
-
-```bash
-npm install --legacy-peer-deps
-npm start            # http://localhost:4200
-npm test             # tests unitaires (Vitest)
-npm run build        # build de production -> dist/showroom-auto/browser
+```
+[ AppComponent ]
+   │
+   ├─► [autos]="autoList" (Property Binding avec @Input) ──► [ SearchBarComponent ]
+   │                                                               │
+   │                                                               ├─ Recherche (searchAutoList)
+   │                                                               ├─ Rendu des modèles (*ngFor)
+   │                                                               └─ Clic bouton "View"
+   │                                                                       │
+   │   (selectAutoEvent)="updateAuto($event)"                              ▼
+   ◄──────────────────────────────────────────────────── selectedAuto(auto).emit(auto)
+   │
+   ▼
+Met à jour `selectedAuto`
+Affiche le panneau latéral de détails (*ngIf)
 ```
 
-## Photos
+---
 
-Placez les images dans `public/photos/` avec les noms utilisés dans `autoList` :
-`CLASS-C.webp, GLA.webp, GLE.webp, FPACE.webp, EPACE.webp, Q3.webp, Q5.webp, A3.webp, X2.webp, IX.webp, X3.webp, EVOQUE.webp, DEFENDER.webp, RANGE.webp, STELVIO.webp, GIULIA.webp`.
-Tant qu'une image est absente, un visuel de secours s'affiche. Vérifiez que vous avez le droit de publier ces images.
+## 3. Installation et Utilisation Locale
 
-## Prix et puissance
+### Prérequis
+- **Node.js** (v20+ ou v22+)
+- **npm** (v10+)
 
-`price` est exprimé en milliers de DNT (230 → « 230,000 DNT ») et `power` en CV fiscaux. Pour changer d'unité, modifiez les templates (`auto-list.component.html`, `app.component.html`).
+### Commandes
 
-## Déploiement GitHub Pages
+```bash
+# Installation des dépendances
+npm install
 
-Le workflow `.github/workflows/deploy.yml` construit et publie l'application à chaque push sur `main`.
-Dans GitHub : **Settings → Pages → Source : GitHub Actions**. URL attendue : `https://<utilisateur>.github.io/showroom-auto/`.
-Build manuel équivalent : `npm run build:gh`.
+# Démarrage du serveur de développement (http://localhost:4200)
+npm start
+
+# Exécution des tests unitaires automatisés
+npm test -- --watch=false
+
+# Compilation de production
+npm run build
+
+# Compilation optimisée pour GitHub Pages (base-href /showroom/)
+npm run build:gh
+```
+
+---
+
+## 4. Données et Images
+
+Les photos des 16 modèles sont stockées dans `public/photos/` :
+- `CLASS-C.webp`, `GLA.webp`, `GLE.webp` (Mercedes Benz)
+- `FPACE.webp`, `EPACE.webp` (Jaguar)
+- `Q3.webp`, `Q5.webp`, `A3.webp` (Audi)
+- `X2.webp`, `IX.webp`, `X3.webp` (BMW)
+- `EVOQUE.webp`, `DEFENDER.webp`, `RANGE.webp` (Land Rover)
+- `STELVIO.webp`, `GIULIA.webp` (Alfa Romeo)
+
+Un visuel SVG de secours (`placeholder.svg`) est inclus en cas d'erreur de chargement.
+
+---
+
+## 5. Déploiement Continu (CI/CD)
+
+Le workflow GitHub Actions `.github/workflows/deploy.yml` compile automatiquement l'application avec `npm run build:gh` à chaque commit sur la branche `main` et déploie le bundle sur GitHub Pages.

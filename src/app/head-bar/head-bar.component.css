@@ -1,47 +1,74 @@
 .head-bar {
+  position: relative;
+  overflow: hidden;
   background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0 8%, transparent 8% 100%),
-    linear-gradient(135deg, #14171a 0%, #2b3035 100%);
+    radial-gradient(ellipse at 50% -20%, rgba(203, 162, 88, 0.22) 0%, transparent 65%),
+    radial-gradient(circle at 10% 50%, rgba(166, 43, 43, 0.15) 0%, transparent 45%),
+    linear-gradient(135deg, #0c0f12 0%, #161b22 50%, #1a2027 100%);
   color: #fff;
-  padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem;
   text-align: center;
+  border-bottom: 1px solid rgba(203, 162, 88, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.head-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 .head-bar__inner {
-  max-width: 960px;
+  position: relative;
+  max-width: 980px;
   margin: 0 auto;
+  z-index: 1;
 }
 
 .head-bar__eyebrow {
-  margin: 0 0 0.75rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.3em;
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #d9b36c;
+  color: var(--color-accent-gold, #cba258);
+  background: rgba(203, 162, 88, 0.1);
+  border: 1px solid rgba(203, 162, 88, 0.3);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
 }
 
 h1 {
   margin: 0;
-  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 6vw, 3.4rem);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   line-height: 1.15;
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
 }
 
 .head-bar__subtitle {
-  margin: 1rem auto 0;
-  max-width: 620px;
-  color: #c4c9ce;
-  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
-  line-height: 1.5;
+  margin: 1.1rem auto 0;
+  max-width: 660px;
+  color: #c9d1d9;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 .head-bar__line {
   display: block;
-  width: 72px;
+  width: 80px;
   height: 3px;
-  margin: 1.5rem auto 0;
-  background: #d9b36c;
+  margin: 1.75rem auto 0;
+  background: linear-gradient(90deg, transparent, #cba258, #dfb76c, transparent);
   border-radius: 2px;
 }
