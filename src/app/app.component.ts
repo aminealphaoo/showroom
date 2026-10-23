@@ -183,10 +183,12 @@ export class AppComponent {
     this.selectedAuto = auto;
   }
 
-  /** Visuel de secours si la photo n'existe pas encore dans public/photos. */
+  /** Visuel de secours : essaie photos/ puis images/ puis placeholder.svg */
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    if (!img.src.endsWith('photos/placeholder.svg')) {
+    if (img.src.includes('photos/')) {
+      img.src = img.src.replace('photos/', 'images/');
+    } else if (!img.src.endsWith('placeholder.svg')) {
       img.src = 'photos/placeholder.svg';
     }
   }
